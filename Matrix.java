@@ -20,17 +20,22 @@ public class Matrix {
         this.elems = elems;
     }
 
-    public Matrix(int n, int m, double[][] elems) {
-        this(n,m);
-
-        assert elems.length == n;
-        for (int i = 0 ; i < elems.length ; i++) {
-            assert elems[i].length == m;
-        }
+    public Matrix(double[][] elems) {
+        this(elems.length,elems[0].length);
 
         for (int i = 0 ; i < elems.length ; i++) {
             for (int j = 0 ; j < elems[i].length ; j++) {
-                this.elems[n * i + j] = elems[i][j];
+                this.elems[elems[i].length * i + j] = elems[i][j];
+            }
+        }
+    }
+
+    public Matrix(Matrix M) {
+        this(M.getN(),M.getM());
+
+        for (int i = 0 ; i < M.getN() ; i++) {
+            for (int j = 0 ; j < M.getM() ; j++) {
+                this.elems[M.getM() * i + j] = M.getElem(i,j);
             }
         }
     }
@@ -66,7 +71,7 @@ public class Matrix {
             j = t;
         }
 
-        return this.elems[this.getN() * i + j];
+        return this.elems[this.getM() * i + j];
     }
 
     public void setElem(int i, int j, double elem) {
@@ -76,7 +81,7 @@ public class Matrix {
             j = t;
         }
 
-        this.elems[this.getN() * i + j] = elem;
+        this.elems[this.getM() * i + j] = elem;
     }
 
     public void transpose() {

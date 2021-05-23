@@ -33,27 +33,67 @@ public final class LinearAlgebra {
             O.setElem(0,0,mean);
         } else {
             // refactor this to generalized methods like axis == -1 case
+            // trash repeating code
             int n = M.getN();
             int m = M.getM();
-            double sum;
+            int l;
+            double total;
 
             if (axis == 0) {
                 O = new Matrix(1,m);
                 
+                for (int k = 0 ; k < m ; k++) {
+
+                    for (int i = 0 ; i < n ; i++) {
+                        total += M.getElem(i,k);
+                    }
+                    O.setElem(0,k,total/n);
+                }
+
             } else {
                 O = new Matrix(n,1);
-            }
+                
+                for (int k = 0 ; k < n ; k++) {
 
-            for ()
+                    for (int i = 0 ; i < m ; i++) {
+                        total += M.getElem(k,i);
+                    }
+                    O.setElem(k,0,total/m);
+                }
+            }
         }
 
         return O;
     }
 
+
+    // A must be a matrix, B can be a row vector, column vector,
+    // or matrix of same shape
     public static Matrix add(Matrix A, Matrix B) {
         
-        assert A.getN() == B.getN();
-        assert A.getM() == B.getM();
+        boolean rowVector = false;
+        boolean colVector = false;
+
+        if (A.getN() != B.getN()) {
+            if (B.getN() == 1) {
+                // we can project the row vector B
+                rowVector = true;
+            } else {
+                // cannot do anything
+                return null;
+            }
+        }
+        if (A.getM() != B.getM()) {
+            if (B.getM() == 1) {
+                // we can project the col vector B
+                colVector = true;
+            } else {
+                // cannot do anything
+                return null;
+            }
+        }
+
+        assert !(rowVector && colVector);
 
         int n = A.getN();
         int m = A.getM();
@@ -62,7 +102,15 @@ public final class LinearAlgebra {
         double elem;
         for (int i = 0 ; i < n ; i++) {
             for (int j = 0 ; j < m ; j++) {
-                elem = A.getElem(i,j) + B.getElem(i,j);
+
+                if (rowVector) {
+                    elem = A.getElem(i,j) + B.getElem(0,j);
+                } else if (colVector) {
+                    elem = A.getElem(i,j) + B.getElem(i,0);
+                } else {
+                    elem = A.getElem(i,j) + B.getElem(i,j);
+                }
+
                 O.setElem(i,j,elem);
             }
         }
@@ -84,11 +132,9 @@ public final class LinearAlgebra {
             for (int j = 0 ; j < outM ; j++) {
 
                 elem = 0;
-
                 for (int k = 0 ; k < L ; k++) {
                     elem += A.getElem(i,k) * B.getElem(k,j);
                 }
-
                 O.setElem(i,j,elem);
             }
         }
@@ -122,9 +168,7 @@ public final class LinearAlgebra {
         double elem;
         for (int i = 0 ; i < n ; i++) {
             for (int j = 0 ; j < m ; j++) {
-
                 elem = M.getElem(i,j) * c;
-
                 O.setElem(i,j,elem);
             }
         }
