@@ -17,7 +17,6 @@ public final class LinearAlgebra {
         return out;
     }
 
-
     // axis is the axis along which to take the mean
     public static Matrix mean(Matrix M, int axis) {
         
@@ -66,6 +65,29 @@ public final class LinearAlgebra {
         return O;
     }
 
+    public static boolean equal(Matrix A, Matrix B) {
+        
+        if (A.getN() != B.getN()) {
+            return false;
+        }
+
+        if (A.getM() != B.getM()) {
+            return false;
+        }
+
+        int n = A.getN();
+        int m = A.getM();
+
+        for (int i = 0 ; i < n ; i++) {
+            for (int j = 0 ; j < m ; j++) {
+                if (A.getElem(i,j) != B.getElem(i,j)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 
     // A must be a matrix, B can be a row vector, column vector,
     // or matrix of same shape
@@ -176,6 +198,29 @@ public final class LinearAlgebra {
         return O;
     }
 
+    public static boolean isDiagonal(Matrix M, double tol) {
+
+        assert tol >= 0;
+
+        int n = M.getN();
+        int m = M.getM();
+
+        double elem;
+        for (int i = 0 ; i < n ; i++) {
+            for (int j = 0 ; j < m ; j++) {
+                if (i == j) {
+                    continue;
+                }
+
+                elem = M.getElem(i,j);
+                if (elem > tol) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }
 
 interface AggFunc {
@@ -187,4 +232,3 @@ class Sum implements AggFunc {
         return curr + elem;
     }
 }
-
