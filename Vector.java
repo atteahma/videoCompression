@@ -5,11 +5,7 @@ public class Vector extends Matrix {
     }
 
     public Vector(int n, double[] elems) {
-        this(n);
-
-        for (int i = 0 ; i < n ; i++) {
-            this.setElem(i,0,elems[i]);
-        }
+        super(n,1,elems);
     }
 
     public double getElem(int i) {

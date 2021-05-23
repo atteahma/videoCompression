@@ -2,19 +2,37 @@ public class Matrix {
     
     private int N;
     private int M;
-    private double[][] elems;
+    private double[] elems;
     private boolean transposed;
 
     public Matrix(int n, int m) {
         this.N = n;
         this.M = m;
         this.transposed = false;
-        this.elems = new double[n][m];
+        this.elems = new double[n * m];
+    }
+
+    public Matrix(int n, int m, double[] elems) {
+        this(n,m);
+
+        assert elems.length == n*m;
+
+        this.elems = elems;
     }
 
     public Matrix(int n, int m, double[][] elems) {
         this(n,m);
-        this.elems = elems;
+
+        assert elems.length == n;
+        for (int i = 0 ; i < elems.length ; i++) {
+            assert elems[i].length == m;
+        }
+
+        for (int i = 0 ; i < elems.length ; i++) {
+            for (int j = 0 ; j < elems[i].length ; j++) {
+                this.elems[n * i + j] = elems[i][j];
+            }
+        }
     }
 
     public int getN() {
@@ -48,7 +66,7 @@ public class Matrix {
             j = t;
         }
 
-        return this.elems[i][j];
+        return this.elems[this.getN() * i + j];
     }
 
     public void setElem(int i, int j, double elem) {
@@ -58,37 +76,17 @@ public class Matrix {
             j = t;
         }
 
-        this.elems[i][j] = elem;
-    }
-
-    public Matrix multiply(Matrix other) {
-        
-        assert this.getM() == other.getN();
-
-        int outN = this.getN();
-        int outM = other.getM();
-        int L = this.getM();
-
-        Matrix out = new Matrix(outN,outM);
-        double elem;
-
-        for (int i = 0 ; i < outN ; i++) {
-            for (int j = 0 ; j < outM ; j++) {
-
-                elem = 0;
-
-                for (int k = 0 ; k < L ; k++) {
-                    elem += this.getElem(i,k) * other.getElem(k,j);
-                }
-
-                out.setElem(i,j,elem);
-            }
-        }
-
-        return out;
+        this.elems[this.getN() * i + j] = elem;
     }
 
     public void transpose() {
         this.transposed = !this.transposed;
+    }
+
+    public void flatten() {
+        int numElems = this.getN() * this.getM();
+        this.N = 1;
+        this.M = numElems;
+        this.transposed = false;
     }
 }
