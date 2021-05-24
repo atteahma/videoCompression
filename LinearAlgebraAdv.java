@@ -64,9 +64,9 @@ public class LinearAlgebraAdv {
         assert n >= m;
 
         double s;
-        double qTemp;
-        double rTemp;
-        double mTemp;
+        double qElem;
+        double rElem;
+        double mElem;
         Matrix Q = new Matrix(n,m);
         Matrix R = new Matrix(m,m);
 
@@ -77,12 +77,12 @@ public class LinearAlgebraAdv {
                 s = s + M.getElem(j,k);
             }
             
-            rTemp = Math.sqrt(s);
-            R.setElem(k,k,rTemp);
+            rElem = Math.sqrt(s);
+            R.setElem(k,k,rElem);
 
             for (int j = 0 ; j < n ; j++) {
-                qTemp = M.getElem(j,k) / R.getElem(k,k);
-                Q.setElem(j,k,qTemp);
+                qElem = M.getElem(j,k) / R.getElem(k,k);
+                Q.setElem(j,k,qElem);
             }
 
             for (int i = k+1 ; i < n ; i++) {
@@ -95,8 +95,8 @@ public class LinearAlgebraAdv {
                 R.setElem(k,i,s);
 
                 for (int j = 0 ; j < m ; j++) {
-                    mTemp = M.getElem(j,i) - R.getElem(k,i) * Q.getElem(j,k);
-                    M.setElem(j,i,mTemp);
+                    mElem = M.getElem(j,i) - R.getElem(k,i) * Q.getElem(j,k);
+                    M.setElem(j,i,mElem);
                 }
             }
         }
