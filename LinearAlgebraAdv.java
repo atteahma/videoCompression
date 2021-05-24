@@ -1,4 +1,6 @@
 public class LinearAlgebraAdv {
+
+    static double EQUAL_TOL = Math.pow(10,-5);
     
     // static class
     private LinearAlgebraAdv() {}
@@ -113,7 +115,7 @@ public class LinearAlgebraAdv {
         Matrix transposeM = new Matrix(M);
         transposeM.transpose();
         assert M.getN() == M.getM();
-        assert LinearAlgebra.equal(M,transposeM);
+        assert LinearAlgebra.equal(M,transposeM,LinearAlgebraAdv.EQUAL_TOL);
         
         // initialize iterative matrices
         int L = M.getN();
@@ -122,10 +124,9 @@ public class LinearAlgebraAdv {
         Matrix[] QR;
         Matrix Q;
         Matrix R;
-        double tol = 0.0001;
 
         // iterate
-        while ( !LinearAlgebra.isDiagonal(eigenvalues, tol) ) {
+        while ( !LinearAlgebra.isDiagonal(eigenvalues, LinearAlgebraAdv.EQUAL_TOL) ) {
             QR = LinearAlgebraAdv.qrDecomposition(eigenvalues);
             Q = QR[0];
             R = QR[1];

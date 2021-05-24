@@ -65,8 +65,10 @@ public final class LinearAlgebra {
         return O;
     }
 
-    public static boolean equal(Matrix A, Matrix B) {
+    public static boolean equal(Matrix A, Matrix B, double tol) {
         
+        assert tol >= 0;
+
         if (A.getN() != B.getN()) {
             return false;
         }
@@ -77,10 +79,16 @@ public final class LinearAlgebra {
 
         int n = A.getN();
         int m = A.getM();
+        double elemA;
+        double elemB;
 
         for (int i = 0 ; i < n ; i++) {
             for (int j = 0 ; j < m ; j++) {
-                if (A.getElem(i,j) != B.getElem(i,j)) {
+                
+                elemA = A.getElem(i,j);
+                elemB = B.getElem(i,j);
+
+                if (Math.abs(elemA - elemB) > tol) {
                     return false;
                 }
             }
